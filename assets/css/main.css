@@ -1,0 +1,215 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Colors - SFU Galleries inspired palette - WCAG AA compliant contrast ratios */
+    --color-primary: #00606B; /* Teal - primary interactive */
+    --color-primary-dark: #004550;
+    --color-secondary: #B40202; /* Red - emphasis and decorative */
+    --color-tertiary: #600067; /* Purple - specific contexts */
+    --color-text: #1a1a1a;
+    --color-text-light: #4a4a4a;
+    --color-bg: #ffffff;
+    --color-bg-alt: #f5f5f5;
+    --color-border: #cccccc;
+    --color-focus: #00606B; /* Teal for focus */
+    --color-error: #B40202; /* Red for errors */
+    --color-success: #007a33;
+
+    /* High contrast colors - Maximum contrast for accessibility */
+    --color-hc-text: #000000;
+    --color-hc-bg: #ffffff;
+    --color-hc-link: #0000ff;
+    --color-hc-visited: #800080;
+    --color-hc-border: #000000;
+
+    /* Typography */
+    --font-size-base: 18px;
+    --font-size-large: 22px;
+    --font-size-xlarge: 26px;
+    --font-size-xxlarge: 32px;
+  }
+
+  html {
+    font-size: var(--font-size-base);
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    font-size: var(--font-size-base);
+    line-height: 1.6;
+    color: var(--color-text);
+    background-color: var(--color-bg);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* High contrast mode */
+  body.high-contrast,
+  body.high-contrast *,
+  body.high-contrast *::before,
+  body.high-contrast *::after {
+    color: var(--color-hc-text) !important;
+    background-color: transparent !important;
+    border-color: var(--color-hc-border) !important;
+  }
+
+  body.high-contrast {
+    background-color: var(--color-hc-bg) !important;
+  }
+
+  body.high-contrast .site-header,
+  body.high-contrast .site-footer,
+  body.high-contrast .tag-content,
+  body.high-contrast .accessibility-controls,
+  body.high-contrast .home-page,
+  body.high-contrast .app-layout {
+    background-color: var(--color-hc-bg) !important;
+  }
+
+  body.high-contrast a,
+  body.high-contrast a:link {
+    color: var(--color-hc-link) !important;
+    text-decoration: underline !important;
+  }
+
+  body.high-contrast a:visited {
+    color: var(--color-hc-visited) !important;
+  }
+
+  body.high-contrast a:hover,
+  body.high-contrast a:focus {
+    background-color: var(--color-hc-text) !important;
+    color: var(--color-hc-bg) !important;
+    outline: 2px solid var(--color-hc-text) !important;
+  }
+
+  body.high-contrast button,
+  body.high-contrast .button,
+  body.high-contrast .control-button,
+  body.high-contrast input[type="button"],
+  body.high-contrast input[type="submit"] {
+    background-color: var(--color-hc-bg) !important;
+    color: var(--color-hc-text) !important;
+    border: 3px solid var(--color-hc-border) !important;
+  }
+
+  body.high-contrast button:hover,
+  body.high-contrast button:focus,
+  body.high-contrast .control-button:hover,
+  body.high-contrast .control-button:focus {
+    background-color: var(--color-hc-text) !important;
+    color: var(--color-hc-bg) !important;
+    outline: 3px solid var(--color-hc-text) !important;
+  }
+
+  body.high-contrast button[aria-pressed='true'] {
+    background-color: var(--color-hc-text) !important;
+    color: var(--color-hc-bg) !important;
+  }
+
+  body.high-contrast input,
+  body.high-contrast textarea,
+  body.high-contrast select {
+    background-color: var(--color-hc-bg) !important;
+    color: var(--color-hc-text) !important;
+    border: 2px solid var(--color-hc-border) !important;
+  }
+
+  body.high-contrast * {
+    background-image: none !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  /* Large text mode */
+  body.large-text {
+    font-size: var(--font-size-large);
+  }
+
+  body.large-text.extra-large-text {
+    font-size: var(--font-size-xlarge);
+  }
+
+  body.large-text.extra-large-text.extra-extra-large-text {
+    font-size: var(--font-size-xxlarge);
+  }
+
+  /* Focus styles for keyboard navigation */
+  :focus {
+    outline: 3px solid var(--color-focus);
+    outline-offset: 2px;
+  }
+
+  :focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--color-focus);
+    outline-offset: 2px;
+  }
+}
+
+@layer components {
+  /* Skip to main content link */
+  .skip-link {
+    @apply absolute -top-24 left-0 z-50 px-4 py-2 font-bold text-white no-underline rounded-br;
+    background: var(--color-primary);
+  }
+
+  .skip-link:focus {
+    @apply top-0;
+    outline: 3px solid var(--color-focus);
+    outline-offset: 2px;
+  }
+
+  /* Container utility */
+  .container {
+    @apply max-w-screen-xl mx-auto px-4;
+  }
+
+  /* Section dividers inspired by SFU Galleries */
+  .section-divider {
+    height: 2px;
+    background: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
+    border: none;
+    margin: 2rem 0;
+  }
+
+  /* Heading with bottom border (SFU style) */
+  .heading-section {
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid var(--color-secondary, #B40202);
+    margin-bottom: 1.5rem;
+  }
+
+  /* Subsection heading with underline (SFU style) */
+  .heading-subsection {
+    text-decoration: underline;
+    text-decoration-color: var(--color-tertiary, #600067);
+    text-underline-offset: 0.3em;
+    margin-bottom: 1rem;
+  }
+
+  /* Screen reader only utility */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+
+  /* Content max-width for readability (80 characters) */
+  .readable-width {
+    max-width: 80ch;
+  }
+}
