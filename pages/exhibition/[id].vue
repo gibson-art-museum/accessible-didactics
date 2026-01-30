@@ -41,7 +41,9 @@
           Skip to next work: {{ works[index + 1].title }}
         </a>
 
-        <TextToSpeech :text="getWorkText(work)" />
+        <ClientOnly>
+          <TextToSpeech :text="getWorkText(work)" />
+        </ClientOnly>
 
         <header class="work-header">
           <p v-if="work.artist" class="work-artist">
