@@ -23,6 +23,7 @@ export default defineNuxtConfig({
   // App configuration
   app: {
     baseURL: '/accessible-didactics/',
+    cdnURL: '/accessible-didactics/',
     head: {
       htmlAttrs: {
         lang: 'en'
@@ -35,14 +36,10 @@ export default defineNuxtConfig({
         { name: 'theme-color', content: '#ffffff' }
       ],
       link: [
-        { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+        { rel: 'icon', type: 'image/x-icon', href: '/accessible-didactics/favicon.ico' }
       ]
     }
   },
-
-  // Static site generation for GitHub Pages
-  ssr: false,
-  target: 'static',
 
   // CSS configuration
   css: [
@@ -72,7 +69,7 @@ export default defineNuxtConfig({
   },
 
   // Static site generation for GitHub Pages
-  ssr: true,
+  ssr: false,
 
   // Runtime config
   runtimeConfig: {
@@ -92,7 +89,7 @@ export default defineNuxtConfig({
       theme_color: '#00606B',
       background_color: '#ffffff',
       display: 'standalone',
-      start_url: '/',
+      start_url: '/accessible-didactics/',
       icons: [
         {
           src: '/icon-192x192.png',
