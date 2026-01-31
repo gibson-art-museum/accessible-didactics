@@ -18,7 +18,8 @@ export default defineNuxtConfig({
 
   // App configuration
   app: {
-    baseURL: '/accessible-didactics/',
+    baseURL:
+      process.env.NODE_ENV === 'production' ? '/accessible-didactics/' : '/',
     head: {
       htmlAttrs: {
         lang: 'en',
