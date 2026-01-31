@@ -18,6 +18,7 @@ export default defineNuxtConfig({
 
   // App configuration
   app: {
+    baseURL: '/accessible-didactics/',
     head: {
       htmlAttrs: {
         lang: 'en',
