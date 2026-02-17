@@ -1,5 +1,8 @@
 <template>
-  <nav class="bg-bg-alt border-b border-border p-3" aria-label="Accessibility settings">
+  <nav
+    class="bg-bg-alt border-b border-border p-3"
+    aria-label="Accessibility settings"
+  >
     <div class="flex flex-wrap gap-2 max-w-4xl mx-auto justify-center">
       <button
         type="button"
@@ -9,7 +12,9 @@
         @click="toggleHighContrast"
         aria-label="Toggle high contrast mode"
       >
-        <span aria-hidden="true" class="text-xl font-bold">{{ isHighContrast ? '◐' : '○' }}</span>
+        <span aria-hidden="true" class="text-xl font-bold">{{
+          isHighContrast ? '◐' : '○'
+        }}</span>
         <span class="control-label">High Contrast</span>
       </button>
 
@@ -21,7 +26,9 @@
         :aria-label="`Increase text size. Current size: ${getFontSizeLabel()}`"
       >
         <span aria-hidden="true" class="text-xl font-bold">A+</span>
-        <span class="control-label">{{ fontSize === 'xxlarge' ? 'Max Size' : 'Larger Text' }}</span>
+        <span class="control-label">{{
+          fontSize === 'xxlarge' ? 'Max Size' : 'Larger Text'
+        }}</span>
       </button>
 
       <button
@@ -32,7 +39,9 @@
         :aria-label="`Decrease text size. Current size: ${getFontSizeLabel()}`"
       >
         <span aria-hidden="true" class="text-xl font-bold">A-</span>
-        <span class="control-label">{{ fontSize === 'normal' ? 'Min Size' : 'Smaller Text' }}</span>
+        <span class="control-label">{{
+          fontSize === 'normal' ? 'Min Size' : 'Smaller Text'
+        }}</span>
       </button>
 
       <button
@@ -96,11 +105,16 @@ function resetSettings() {
 
 function getFontSizeLabel() {
   switch (fontSize.value) {
-    case 'normal': return 'Normal (18px)'
-    case 'large': return 'Large (22px)'
-    case 'xlarge': return 'Extra Large (26px)'
-    case 'xxlarge': return 'Extra Extra Large (32px)'
-    default: return 'Normal'
+    case 'normal':
+      return 'Normal (18px)'
+    case 'large':
+      return 'Large (22px)'
+    case 'xlarge':
+      return 'Extra Large (26px)'
+    case 'xxlarge':
+      return 'Extra Extra Large (32px)'
+    default:
+      return 'Normal'
   }
 }
 
@@ -124,13 +138,21 @@ function applySettings() {
     }
 
     // Font size
-    body.classList.remove('large-text', 'extra-large-text', 'extra-extra-large-text')
+    body.classList.remove(
+      'large-text',
+      'extra-large-text',
+      'extra-extra-large-text',
+    )
     if (fontSize.value === 'large') {
       body.classList.add('large-text')
     } else if (fontSize.value === 'xlarge') {
       body.classList.add('large-text', 'extra-large-text')
     } else if (fontSize.value === 'xxlarge') {
-      body.classList.add('large-text', 'extra-large-text', 'extra-extra-large-text')
+      body.classList.add(
+        'large-text',
+        'extra-large-text',
+        'extra-extra-large-text',
+      )
     }
   }
 }

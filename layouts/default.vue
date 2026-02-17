@@ -7,7 +7,7 @@
       <div class="container">
         <h1 class="site-title">
           <NuxtLink to="/" aria-label="Go to home page">
-            Accessible NFC Tags
+            Gibson Accessible NFC Tags
           </NuxtLink>
         </h1>
       </div>
@@ -22,8 +22,11 @@
     <footer class="site-footer" role="contentinfo">
       <div class="container">
         <p>
-          &copy; {{ currentYear }} Accessible NFC Tags.
-          <span class="sr-only">This website provides accessible content for NFC-tagged exhibits.</span>
+          &copy; {{ currentYear }} Gibson Accessible NFC Tags.
+          <span class="sr-only"
+            >This website provides accessible content for NFC-tagged
+            exhibits.</span
+          >
         </p>
       </div>
     </footer>
@@ -34,7 +37,7 @@
 const currentYear = new Date().getFullYear()
 </script>
 
-<style scoped >
+<style scoped>
 .app-layout {
   display: flex;
   flex-direction: column;

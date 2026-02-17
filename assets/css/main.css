@@ -5,17 +5,17 @@
 @layer base {
   :root {
     /* Colors - SFU Galleries inspired palette - WCAG AA compliant contrast ratios */
-    --color-primary: #00606B; /* Teal - primary interactive */
+    --color-primary: #00606b; /* Teal - primary interactive */
     --color-primary-dark: #004550;
-    --color-secondary: #B40202; /* Red - emphasis and decorative */
+    --color-secondary: #b40202; /* Red - emphasis and decorative */
     --color-tertiary: #600067; /* Purple - specific contexts */
     --color-text: #1a1a1a;
     --color-text-light: #4a4a4a;
     --color-bg: #ffffff;
     --color-bg-alt: #f5f5f5;
     --color-border: #cccccc;
-    --color-focus: #00606B; /* Teal for focus */
-    --color-error: #B40202; /* Red for errors */
+    --color-focus: #00606b; /* Teal for focus */
+    --color-error: #b40202; /* Red for errors */
     --color-success: #007a33;
 
     /* High contrast colors - Maximum contrast for accessibility */
@@ -38,7 +38,15 @@
   }
 
   body {
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    font-family:
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      'Segoe UI',
+      Roboto,
+      'Helvetica Neue',
+      Arial,
+      sans-serif;
     font-size: var(--font-size-base);
     line-height: 1.6;
     color: var(--color-text);
@@ -52,13 +60,13 @@
   body.high-contrast *,
   body.high-contrast *::before,
   body.high-contrast *::after {
-    color: var(--color-hc-text) !important;
     background-color: transparent !important;
     border-color: var(--color-hc-border) !important;
   }
 
   body.high-contrast {
     background-color: var(--color-hc-bg) !important;
+    color: var(--color-hc-text) !important;
   }
 
   body.high-contrast .site-header,
@@ -90,8 +98,8 @@
   body.high-contrast button,
   body.high-contrast .button,
   body.high-contrast .control-button,
-  body.high-contrast input[type="button"],
-  body.high-contrast input[type="submit"] {
+  body.high-contrast input[type='button'],
+  body.high-contrast input[type='submit'] {
     background-color: var(--color-hc-bg) !important;
     color: var(--color-hc-text) !important;
     border: 3px solid var(--color-hc-border) !important;
@@ -106,9 +114,11 @@
     outline: 3px solid var(--color-hc-text) !important;
   }
 
-  body.high-contrast button[aria-pressed='true'] {
+  body.high-contrast button[aria-pressed='true'],
+  body.high-contrast .control-button[aria-pressed='true'] {
     background-color: var(--color-hc-text) !important;
     color: var(--color-hc-bg) !important;
+    border-color: var(--color-hc-text) !important;
   }
 
   body.high-contrast input,
@@ -127,15 +137,15 @@
 
   /* Large text mode */
   body.large-text {
-    font-size: var(--font-size-large);
+    font-size: var(--font-size-large) !important;
   }
 
   body.large-text.extra-large-text {
-    font-size: var(--font-size-xlarge);
+    font-size: var(--font-size-xlarge) !important;
   }
 
   body.large-text.extra-large-text.extra-extra-large-text {
-    font-size: var(--font-size-xxlarge);
+    font-size: var(--font-size-xxlarge) !important;
   }
 
   /* Focus styles for keyboard navigation */
@@ -175,7 +185,12 @@
   /* Section dividers inspired by SFU Galleries */
   .section-divider {
     height: 2px;
-    background: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
+    background: linear-gradient(
+      to right,
+      rgba(0, 0, 0, 0),
+      rgba(0, 0, 0, 0.75),
+      rgba(0, 0, 0, 0)
+    );
     border: none;
     margin: 2rem 0;
   }
@@ -183,7 +198,7 @@
   /* Heading with bottom border (SFU style) */
   .heading-section {
     padding-bottom: 0.75rem;
-    border-bottom: 2px solid var(--color-secondary, #B40202);
+    border-bottom: 2px solid var(--color-secondary, #b40202);
     margin-bottom: 1.5rem;
   }
 

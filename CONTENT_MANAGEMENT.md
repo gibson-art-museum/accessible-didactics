@@ -1,6 +1,6 @@
 # Content Management Guide
 
-This guide explains how to add, edit, and manage NFC tag content for the Accessible NFC Tags website.
+This guide explains how to add, edit, and manage NFC tag content for the Gibson Accessible NFC Tags website.
 
 ## Content Structure
 
@@ -36,7 +36,7 @@ updated_at: '2025-10-18'
 related_tags: ['002', '003']
 ---
 
-Your content goes here. You can use **bold**, *italic*, and other Markdown formatting.
+Your content goes here. You can use **bold**, _italic_, and other Markdown formatting.
 
 ## Subheadings
 
@@ -62,6 +62,7 @@ tag_id,title,location,content,related_tags
 ```
 
 **Column Descriptions:**
+
 - `tag_id`: Unique identifier (required)
 - `title`: Display title (required)
 - `location`: Physical location (optional)
@@ -87,7 +88,7 @@ if (!csvFile) {
 const csvContent = fs.readFileSync(csvFile, 'utf-8')
 const records = parse(csvContent, {
   columns: true,
-  skip_empty_lines: true
+  skip_empty_lines: true,
 })
 
 const outputDir = './content/tags'
@@ -95,9 +96,12 @@ if (!fs.existsSync(outputDir)) {
   fs.mkdirSync(outputDir, { recursive: true })
 }
 
-records.forEach(record => {
+records.forEach((record) => {
   const relatedTags = record.related_tags
-    ? record.related_tags.split(';').map(t => `'${t.trim()}'`).join(', ')
+    ? record.related_tags
+        .split(';')
+        .map((t) => `'${t.trim()}'`)
+        .join(', ')
     : ''
 
   const frontmatter = `---
@@ -121,6 +125,7 @@ console.log(`\nImported ${records.length} tags successfully!`)
 ```
 
 **To use:**
+
 ```bash
 npm install csv-parse
 node csv-to-markdown.js tags.csv
@@ -156,11 +161,13 @@ The content body supports standard Markdown:
 
 ```markdown
 # H1 Heading (avoid - use H2 instead for semantic hierarchy)
+
 ## H2 Heading
+
 ### H3 Heading
 
 **Bold text**
-*Italic text*
+_Italic text_
 
 [Link text](https://example.com)
 
@@ -238,7 +245,7 @@ git push
 
 ### Formatting looks wrong
 
-1. Check for unclosed Markdown syntax (missing **, ], etc.)
+1. Check for unclosed Markdown syntax (missing \*\*, ], etc.)
 2. Ensure blank lines between sections
 3. Verify frontmatter is between `---` markers
 
@@ -251,6 +258,7 @@ git push
 ## Questions?
 
 Refer to:
+
 - Nuxt Content docs: https://content.nuxt.com
 - Markdown guide: https://www.markdownguide.org
 - WCAG accessibility: https://www.w3.org/WAI/WCAG21/quickref/

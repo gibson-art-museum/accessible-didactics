@@ -3,21 +3,17 @@ export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: false },
 
-  modules: [
-    '@nuxtjs/tailwindcss',
-    '@nuxt/content',
-    '@vite-pwa/nuxt'
-  ],
+  modules: ['@nuxtjs/tailwindcss', '@nuxt/content', '@vite-pwa/nuxt'],
 
   // Build configuration
   build: {
-    transpile: []
+    transpile: [],
   },
 
   // TypeScript configuration - disable strict mode for build
   typescript: {
     typeCheck: false,
-    strict: false
+    strict: false,
   },
 
   // App configuration
@@ -26,46 +22,45 @@ export default defineNuxtConfig({
     cdnURL: '/accessible-didactics/',
     head: {
       htmlAttrs: {
-        lang: 'en'
+        lang: 'en',
       },
-      title: 'Accessible NFC Tags',
+      title: 'Gibson Accessible NFC Tags',
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-        { name: 'description', content: 'Accessible content for NFC-tagged exhibits and materials' },
-        { name: 'theme-color', content: '#ffffff' }
+        {
+          name: 'description',
+          content: 'Accessible content for NFC-tagged exhibits and materials',
+        },
+        { name: 'theme-color', content: '#ffffff' },
       ],
       link: [
-        { rel: 'icon', type: 'image/x-icon', href: '/accessible-didactics/favicon.ico' }
-      ]
-    }
+        {
+          rel: 'icon',
+          type: 'image/x-icon',
+          href: '/accessible-didactics/favicon.ico',
+        },
+      ],
+    },
   },
 
   // CSS configuration
-  css: [
-    '~/assets/css/main.css'
-  ],
+  css: ['~/assets/css/main.css'],
 
   // Content module configuration
   content: {
     documentDriven: false,
     markdown: {
-      anchorLinks: false
-    }
+      anchorLinks: false,
+    },
   },
 
   // Nitro configuration for static generation
   nitro: {
     prerender: {
       crawlLinks: true,
-      routes: [
-        '/',
-        '/exhibition/post-impressionism',
-        '/tag/001',
-        '/tag/002',
-        '/tag/003'
-      ]
-    }
+      routes: ['/'],
+    },
   },
 
   // Static site generation for GitHub Pages
@@ -74,8 +69,8 @@ export default defineNuxtConfig({
   // Runtime config
   runtimeConfig: {
     public: {
-      siteUrl: 'https://yourusername.github.io/accessible-didactics'
-    }
+      siteUrl: 'https://gibson-art-museum.github.io/accessible-didactics',
+    },
   },
 
   // PWA configuration for offline access
@@ -83,7 +78,7 @@ export default defineNuxtConfig({
   pwa: {
     registerType: 'autoUpdate',
     manifest: {
-      name: 'Accessible NFC Tags',
+      name: 'Gibson Accessible NFC Tags',
       short_name: 'NFC Tags',
       description: 'Accessible content for NFC-tagged exhibits and materials',
       theme_color: '#00606B',
@@ -94,14 +89,14 @@ export default defineNuxtConfig({
         {
           src: '/icon-192x192.png',
           sizes: '192x192',
-          type: 'image/png'
+          type: 'image/png',
         },
         {
           src: '/icon-512x512.png',
           sizes: '512x512',
-          type: 'image/png'
-        }
-      ]
+          type: 'image/png',
+        },
+      ],
     },
     workbox: {
       navigateFallback: '/',
@@ -114,12 +109,12 @@ export default defineNuxtConfig({
             cacheName: 'google-fonts-cache',
             expiration: {
               maxEntries: 10,
-              maxAgeSeconds: 60 * 60 * 24 * 365 // 1 year
+              maxAgeSeconds: 60 * 60 * 24 * 365, // 1 year
             },
             cacheableResponse: {
-              statuses: [0, 200]
-            }
-          }
+              statuses: [0, 200],
+            },
+          },
         },
         {
           urlPattern: /^https:\/\/fonts\.gstatic\.com\/.*/i,
@@ -128,22 +123,22 @@ export default defineNuxtConfig({
             cacheName: 'gstatic-fonts-cache',
             expiration: {
               maxEntries: 10,
-              maxAgeSeconds: 60 * 60 * 24 * 365 // 1 year
+              maxAgeSeconds: 60 * 60 * 24 * 365, // 1 year
             },
             cacheableResponse: {
-              statuses: [0, 200]
-            }
-          }
-        }
-      ]
+              statuses: [0, 200],
+            },
+          },
+        },
+      ],
     },
     client: {
       installPrompt: true,
-      periodicSyncForUpdates: 3600 // Check for updates every hour
+      periodicSyncForUpdates: 3600, // Check for updates every hour
     },
     devOptions: {
-      enabled: true,
-      type: 'module'
-    }
-  }
+      enabled: false,
+      type: 'module',
+    },
+  },
 })

@@ -1,16 +1,18 @@
-# Accessible NFC Tags Website
+# Gibson Accessible NFC Tags Website
 
 A fully accessible, mobile-first website for providing detailed content to blind and visually impaired users who tap NFC tags on physical exhibits, didactics, or informational materials.
 
 ## Features
 
 ### Core Functionality
+
 - **Dynamic routing** for NFC tags at `/tag/[id]` URLs
 - **Content management** using Nuxt Content with Markdown files
 - **Progressive Web App (PWA)** support for offline access
 - **Text-to-Speech** integration using Web Speech API
 
 ### Accessibility First
+
 - **WCAG 2.1 Level AA compliant** design
 - **Screen reader optimized** with semantic HTML and ARIA labels
 - **Keyboard navigation** support with visible focus indicators
@@ -20,6 +22,7 @@ A fully accessible, mobile-first website for providing detailed content to blind
 - **No keyboard traps** or auto-playing content
 
 ### User Experience
+
 - Mobile-first responsive design
 - Touch targets minimum 44x44px
 - Fast load times optimized for 3G networks
@@ -179,6 +182,7 @@ Follow the prompts to deploy.
 ### Programming Tags
 
 1. Write the URL to each tag in NDEF format:
+
    ```
    https://yourdomain.com/tag/001
    ```
@@ -207,6 +211,7 @@ npx lighthouse http://localhost:3000 --view
 ```
 
 Target scores:
+
 - Accessibility: 95+
 - Performance: 85+
 - Best Practices: 95+
@@ -230,6 +235,7 @@ Target scores:
 #### Color Contrast
 
 Use browser extensions:
+
 - [WAVE](https://wave.webaim.org/extension/)
 - [axe DevTools](https://www.deque.com/axe/devtools/)
 
@@ -263,9 +269,9 @@ pwa: {
 Edit design tokens in `assets/css/_variables.scss`:
 
 ```scss
-$color-primary: #0066cc;        // Primary color
-$font-size-base: 18px;          // Base font size
-$color-text: #1a1a1a;           // Text color
+$color-primary: #0066cc; // Primary color
+$font-size-base: 18px; // Base font size
+$color-text: #1a1a1a; // Text color
 ```
 
 ## Browser Support
@@ -321,6 +327,7 @@ When contributing, please:
 ## Support
 
 For questions or issues:
+
 - Review [REQUIREMENTS.md](./REQUIREMENTS.md) for project details
 - Check [CONTENT_MANAGEMENT.md](./CONTENT_MANAGEMENT.md) for content help
 

@@ -2,7 +2,9 @@
   <div class="error-page">
     <div class="error-content">
       <h1 class="error-title">
-        <span class="error-code" aria-label="Error code">{{ error?.statusCode || 404 }}</span>
+        <span class="error-code" aria-label="Error code">{{
+          error?.statusCode || 404
+        }}</span>
         <span class="sr-only">Error:</span>
         {{ errorTitle }}
       </h1>
@@ -12,9 +14,7 @@
       </p>
 
       <div class="error-actions">
-        <NuxtLink to="/" class="button">
-          Go to Home Page
-        </NuxtLink>
+        <NuxtLink to="/" class="button"> Go to Home Page </NuxtLink>
 
         <button
           type="button"
@@ -30,7 +30,9 @@
         <ul>
           <li>Check that the NFC tag ID is correct</li>
           <li>Try scanning the tag again</li>
-          <li>Browse available tags from the <NuxtLink to="/">home page</NuxtLink></li>
+          <li>
+            Browse available tags from the <NuxtLink to="/">home page</NuxtLink>
+          </li>
           <li>Contact support if the problem persists</li>
         </ul>
       </section>
@@ -83,17 +85,17 @@ function handleBack() {
 
 // Set page metadata
 useHead({
-  title: `${errorTitle.value} - Accessible NFC Tags`,
+  title: `${errorTitle.value} - Gibson Accessible NFC Tags`,
   meta: [
     {
       name: 'robots',
-      content: 'noindex'
-    }
-  ]
+      content: 'noindex',
+    },
+  ],
 })
 </script>
 
-<style scoped >
+<style scoped>
 .error-page {
   min-height: 60vh;
   display: flex;
