@@ -22,6 +22,7 @@
         type="button"
         class="control-button"
         @click="increaseFontSize"
+        @touchend.prevent="increaseFontSize"
         :disabled="fontSize === 'xxlarge'"
         :aria-label="`Increase text size. Current size: ${getFontSizeLabel()}`"
       >
@@ -35,6 +36,7 @@
         type="button"
         class="control-button"
         @click="decreaseFontSize"
+        @touchend.prevent="decreaseFontSize"
         :disabled="fontSize === 'normal'"
         :aria-label="`Decrease text size. Current size: ${getFontSizeLabel()}`"
       >
