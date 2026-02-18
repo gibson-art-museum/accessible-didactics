@@ -1,10 +1,10 @@
 <template>
   <div class="home-page">
     <section class="intro">
-      <h1>Welcome to Gibson Accessible NFC Tags</h1>
+      <h1>Welcome to Gibson Accessible Exhibition Didactics</h1>
       <p class="lead">
-        Scan an NFC tag to access detailed information about exhibits and
-        artworks.
+        Scan an Exhibition Didactic to access detailed information about
+        exhibits and artworks.
       </p>
     </section>
 
@@ -79,7 +79,7 @@ const { data: exhibitions } = await useAsyncData('all-exhibitions', () =>
 
 // Set page metadata
 useHead({
-  title: 'Home - Gibson Accessible NFC Tags',
+  title: 'Home - Gibson Accessible Exhibition Didactics',
   meta: [
     {
       name: 'description',

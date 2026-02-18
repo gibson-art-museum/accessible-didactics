@@ -24,7 +24,7 @@ export default defineNuxtConfig({
       htmlAttrs: {
         lang: 'en',
       },
-      title: 'Gibson Accessible NFC Tags',
+      title: 'Gibson Accessible Exhibition Didactics',
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -78,7 +78,7 @@ export default defineNuxtConfig({
   pwa: {
     registerType: 'autoUpdate',
     manifest: {
-      name: 'Gibson Accessible NFC Tags',
+      name: 'Gibson Accessible Exhibition Didactics',
       short_name: 'NFC Tags',
       description: 'Accessible content for NFC-tagged exhibits and materials',
       theme_color: '#00606B',

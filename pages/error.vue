@@ -85,7 +85,7 @@ function handleBack() {
 
 // Set page metadata
 useHead({
-  title: `${errorTitle.value} - Gibson Accessible NFC Tags`,
+  title: `${errorTitle.value} - Gibson Accessible Exhibition Didactics`,
   meta: [
     {
       name: 'robots',

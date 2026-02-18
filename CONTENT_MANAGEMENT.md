@@ -1,6 +1,6 @@
 # Content Management Guide
 
-This guide explains how to add, edit, and manage NFC tag content for the Gibson Accessible NFC Tags website.
+This guide explains how to add, edit, and manage content for the Gibson Accessible Exhibition Didactics website.
 
 ## Content Structure
 

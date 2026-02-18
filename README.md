@@ -1,4 +1,4 @@
-# Gibson Accessible NFC Tags Website
+# Gibson Accessible Exhibition Didactics Website
 
 A fully accessible, mobile-first website for providing detailed content to blind and visually impaired users who tap NFC tags on physical exhibits, didactics, or informational materials.
 

@@ -2,18 +2,22 @@
   <div class="exhibition-page">
     <article v-if="exhibition" class="exhibition-content" role="article">
       <header class="exhibition-header">
-        <h1>{{ exhibition.title }}</h1>
+        <h1 class="heading-section">{{ exhibition.title }}</h1>
         <p v-if="exhibition.description" class="exhibition-description">
           {{ exhibition.description }}
         </p>
-        <p v-if="exhibition.location" class="exhibition-location">
+        <!-- <p v-if="exhibition.location" class="exhibition-location">
           <span class="sr-only">Location:</span>
           <strong>{{ exhibition.location }}</strong>
-        </p>
+        </p> -->
       </header>
 
       <!-- Navigation between works -->
-      <nav v-if="works && works.length > 1" class="works-navigation" aria-label="Navigate between works in exhibition">
+      <nav
+        v-if="works && works.length > 1"
+        class="works-navigation"
+        aria-label="Navigate between works in exhibition"
+      >
         <h2 class="sr-only">Works in this Exhibition</h2>
         <ul class="works-nav-list">
           <li v-for="(work, index) in works" :key="work.anchor">
@@ -50,7 +54,8 @@
             {{ work.artist }}
           </p>
           <h2 :id="`work-title-${work.anchor}`" class="work-title">
-            <em>{{ work.title }}</em><span v-if="work.year">, {{ work.year }}</span>
+            <em>{{ work.title }}</em
+            ><span v-if="work.year">, {{ work.year }}</span>
           </h2>
           <p v-if="work.materials" class="work-materials">
             {{ work.materials }}
@@ -112,9 +117,7 @@
             {{ formatDate(exhibition.updated_at) }}
           </time>
         </p>
-        <NuxtLink to="/" class="back-link">
-          ← Back to Home
-        </NuxtLink>
+        <NuxtLink to="/" class="back-link"> ← Back to Home </NuxtLink>
       </footer>
     </article>
 
@@ -131,7 +134,7 @@ const exhibitionId = route.params.id as string
 // Fetch the exhibition content
 const { data: exhibition, error } = await useAsyncData(
   `exhibition-${exhibitionId}`,
-  () => queryContent(`exhibitions/${exhibitionId}`).findOne()
+  () => queryContent(`exhibitions/${exhibitionId}`).findOne(),
 )
 
 // Handle 404 - redirect to error page if exhibition not found
@@ -139,7 +142,7 @@ if (error.value || !exhibition.value) {
   throw createError({
     statusCode: 404,
     statusMessage: 'Exhibition Not Found',
-    fatal: true
+    fatal: true,
   })
 }
 
@@ -155,9 +158,9 @@ useHead({
   meta: [
     {
       name: 'description',
-      content: exhibition.value?.description || `Exhibition: ${exhibitionId}`
-    }
-  ]
+      content: exhibition.value?.description || `Exhibition: ${exhibitionId}`,
+    },
+  ],
 })
 
 // Scroll to anchor on mount if present
@@ -188,11 +191,11 @@ function getWorkText(work: any): string {
   }
 
   text += work.title
-  
+
   if (work.year) {
     text += `, ${work.year}`
   }
-  
+
   text += '. '
 
   if (work.materials) {
@@ -228,7 +231,7 @@ function formatDate(dateString: string): string {
   return date.toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'long',
-    day: 'numeric'
+    day: 'numeric',
   })
 }
 </script>
@@ -245,15 +248,15 @@ function formatDate(dateString: string): string {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
+.heading-section {
+  margin-bottom: 1.5rem;
+  font-size: 1.75rem;
+  color: var(--color-text, #1a1a1a);
+}
+
 .exhibition-header {
   margin-bottom: 2rem;
   padding-bottom: 1.5rem;
-  border-bottom: 2px solid var(--color-border, #cccccc);
-
-  h1 {
-    margin-bottom: 1rem;
-    color: var(--color-text, #1a1a1a);
-  }
 
   .exhibition-description {
     margin-bottom: 1rem;
@@ -360,7 +363,7 @@ function formatDate(dateString: string): string {
     margin-bottom: 0.5rem;
     color: var(--color-text, #1a1a1a);
     font-weight: 400;
-    
+
     em {
       font-style: italic;
     }

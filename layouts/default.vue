@@ -7,7 +7,7 @@
       <div class="container">
         <h1 class="site-title">
           <NuxtLink to="/" aria-label="Go to home page">
-            Gibson Accessible NFC Tags
+            Gibson Accessible Exhibition Didactics
           </NuxtLink>
         </h1>
       </div>
@@ -22,7 +22,7 @@
     <footer class="site-footer" role="contentinfo">
       <div class="container">
         <p>
-          &copy; {{ currentYear }} Gibson Accessible NFC Tags.
+          &copy; {{ currentYear }} Gibson Accessible Exhibition Didactics.
           <span class="sr-only"
             >This website provides accessible content for NFC-tagged
             exhibits.</span

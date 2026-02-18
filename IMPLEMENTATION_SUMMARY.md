@@ -54,7 +54,7 @@ Configured `@vite-pwa/nuxt` module for offline access:
 
 ```javascript
 {
-  name: 'Gibson Accessible NFC Tags',
+  name: 'Gibson Accessible Exhibition Didactics',
   short_name: 'NFC Tags',
   display: 'standalone',
   theme_color: '#00606B',
