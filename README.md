@@ -99,16 +99,17 @@ rooms:
 
 These `room_id` values correspond to regions on the SVG map. Use them exactly:
 
-| Room                        | `room_id`            |
-| --------------------------- | -------------------- |
-| Arya and Hamid Eshghi Forum | `forum`              |
-| North Gallery               | `north-gallery`      |
-| Andrew Petter Hall          | `andrew-petter-hall` |
-| Media Gallery               | `media-gallery`      |
-| Salon                       | `salon`              |
-| South Gallery               | `south-gallery`      |
-| Library                     | `library`            |
-| Shop                        | `shop`               |
+| Room                          | `room_id`            |
+| ----------------------------- | -------------------- |
+| Arya and Hamid Eshghi Forum   | `forum`              |
+| North Gallery                 | `north-gallery`      |
+| Audain and Karasawa Courtyard | `courtyard`          |
+| Andrew Petter Hall            | `andrew-petter-hall` |
+| Media Gallery                 | `media-gallery`      |
+| Salon                         | `salon`              |
+| South Gallery                 | `south-gallery`      |
+| Library                       | `library`            |
+| Shop                          | `shop`               |
 
 ### Archiving an Exhibition
 

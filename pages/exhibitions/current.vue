@@ -23,6 +23,28 @@
         </ul>
       </nav>
 
+      <!-- Exhibition introduction -->
+      <section
+        v-if="exhibition?.introduction_text || exhibition?.introduction_audio"
+        id="introduction"
+        class="exhibition-introduction"
+        aria-labelledby="introduction-heading"
+      >
+        <h2 id="introduction-heading" class="introduction-heading">
+          Introduction
+        </h2>
+        <p v-if="exhibition.introduction_text" class="introduction-text">
+          {{ exhibition.introduction_text }}
+        </p>
+        <ClientOnly>
+          <AudioPlayer
+            v-if="exhibition.introduction_audio"
+            :src="exhibition.introduction_audio"
+            title="Exhibition Introduction"
+          />
+        </ClientOnly>
+      </section>
+
       <!-- Individual rooms with anchor links -->
       <section
         v-for="(room, roomIndex) in rooms"
@@ -95,15 +117,24 @@
               <p v-if="work.collection" class="work-collection">
                 {{ work.collection }}
               </p>
-              <p v-if="work.location" class="work-location">
-                <span class="sr-only">Location:</span>
-                {{ work.location }}
-              </p>
             </header>
 
             <div class="work-body">
               <p v-if="work.description">{{ work.description }}</p>
               <div v-if="work.content" v-html="work.content"></div>
+
+              <ClientOnly>
+                <AudioPlayer
+                  v-if="work.audio"
+                  :ref="
+                    (el: any) =>
+                      registerAudioPlayer(el, room.room_id, work.anchor)
+                  "
+                  :src="work.audio"
+                  :title="`${work.artist ? work.artist + ', ' : ''}${work.title}`"
+                  @ended="onWorkAudioEnded(room.room_id, work.anchor)"
+                />
+              </ClientOnly>
 
               <div v-if="work.technical_details" class="technical-details">
                 <h4>Technical Details</h4>
@@ -178,30 +209,39 @@
             :key="archived._path"
             class="archive-item"
           >
-            <NuxtLink
-              :to="`/exhibitions/${archived._path.split('/').pop()}`"
-              class="archive-card"
-            >
-              <h3 class="archive-title">{{ archived.title }}</h3>
-              <p v-if="archived.description" class="archive-description">
-                {{ archived.description }}
-              </p>
-              <p
-                v-if="archived.date_start || archived.date_end"
-                class="archive-dates"
-              >
-                <time
-                  v-if="archived.date_start"
-                  :datetime="archived.date_start"
+            <div class="archive-card">
+              <div class="archive-card-body">
+                <h3 class="archive-title">{{ archived.title }}</h3>
+                <p v-if="archived.description" class="archive-description">
+                  {{ archived.description }}
+                </p>
+                <p
+                  v-if="archived.date_start || archived.date_end"
+                  class="archive-dates"
                 >
-                  {{ formatDate(archived.date_start) }}
-                </time>
-                <span v-if="archived.date_start && archived.date_end"> – </span>
-                <time v-if="archived.date_end" :datetime="archived.date_end">
-                  {{ formatDate(archived.date_end) }}
-                </time>
-              </p>
-            </NuxtLink>
+                  <time
+                    v-if="archived.date_start"
+                    :datetime="archived.date_start"
+                  >
+                    {{ formatDate(archived.date_start) }}
+                  </time>
+                  <span v-if="archived.date_start && archived.date_end">
+                    –
+                  </span>
+                  <time v-if="archived.date_end" :datetime="archived.date_end">
+                    {{ formatDate(archived.date_end) }}
+                  </time>
+                </p>
+              </div>
+              <div class="archive-card-footer">
+                <NuxtLink
+                  :to="`/exhibitions/${archived._path.split('/').pop()}`"
+                  class="archive-card-btn"
+                >
+                  View Exhibition
+                </NuxtLink>
+              </div>
+            </div>
           </li>
         </ul>
       </section>
@@ -243,6 +283,35 @@ useHead({
     },
   ],
 })
+
+// Audio player registry for per-room playlist
+type AudioPlayerInstance = { play: () => void; pause: () => void }
+const audioPlayers = new Map<string, AudioPlayerInstance>()
+
+function registerAudioPlayer(
+  el: AudioPlayerInstance | null,
+  roomId: string,
+  anchor: string,
+) {
+  const key = `${roomId}:${anchor}`
+  if (el) {
+    audioPlayers.set(key, el)
+  } else {
+    audioPlayers.delete(key)
+  }
+}
+
+function onWorkAudioEnded(roomId: string, anchor: string) {
+  const room = rooms.value.find((r: any) => r.room_id === roomId)
+  if (!room) return
+  const audioWorks = room.works.filter((w: any) => !!w.audio)
+  const currentIndex = audioWorks.findIndex((w: any) => w.anchor === anchor)
+  const nextWork = audioWorks[currentIndex + 1]
+  if (nextWork) {
+    const key = `${roomId}:${nextWork.anchor}`
+    audioPlayers.get(key)?.play()
+  }
+}
 
 // Get full text for a work for text-to-speech
 function getWorkText(work: any): string {
@@ -336,6 +405,27 @@ function formatDate(dateString: string): string {
     outline: 3px solid var(--color-focus, #00606b);
     outline-offset: 2px;
   }
+}
+
+/* Exhibition introduction */
+.exhibition-introduction {
+  margin: 2rem 0;
+  padding: 1.5rem 2rem;
+  border-left: 4px solid var(--color-primary, #00606b);
+  background: var(--color-bg-alt, #f5f5f5);
+  border-radius: 0 8px 8px 0;
+}
+
+.introduction-heading {
+  font-size: 1.25rem;
+  margin-bottom: 0.75rem;
+  color: var(--color-text, #1a1a1a);
+}
+
+.introduction-text {
+  line-height: 1.7;
+  color: var(--color-text, #1a1a1a);
+  margin-bottom: 0;
 }
 
 /* Room sections */
@@ -464,11 +554,6 @@ function formatDate(dateString: string): string {
     margin-bottom: 0.25rem;
   }
 
-  .work-location {
-    font-size: 0.95rem;
-    color: var(--color-text-light, #4a4a4a);
-    margin: 0;
-  }
 }
 
 .work-body {
@@ -555,21 +640,33 @@ function formatDate(dateString: string): string {
 }
 
 .archive-card {
-  display: block;
-  padding: 1.5rem;
   background: var(--color-bg-alt, #f5f5f5);
   border: 1px solid var(--color-border, #cccccc);
   border-left: 4px solid var(--color-primary, #00606b);
   border-radius: 6px;
+  overflow: hidden;
+}
+
+.archive-card-body {
+  padding: 1.5rem;
+}
+
+.archive-card-footer {
+  padding: 0 1.5rem 1.5rem;
+}
+
+.archive-card-btn {
+  display: inline-block;
+  padding: 0.6rem 1.25rem;
+  background: var(--color-primary, #00606b);
+  color: white;
   text-decoration: none;
-  color: inherit;
-  transition:
-    border-color 0.2s ease-in-out,
-    box-shadow 0.2s ease-in-out;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 0.95rem;
 
   &:hover {
-    border-color: var(--color-primary, #00606b);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    background: var(--color-primary-dark, #004a52);
   }
 
   &:focus {

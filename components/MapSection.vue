@@ -44,6 +44,15 @@
           data-room="north-gallery"
         />
         <polygon
+          points="241.502 359.13 1263.256 1056.21 1263.256 357.4268 241.502 359.13"
+          @click="navigateToExhibition"
+          :class="[
+            'interactive-shape',
+            { 'inactive-shape': !isActive('courtyard') },
+          ]"
+          data-room="courtyard"
+        />
+        <polygon
           points="941.9733 1462.7723 681.6869 1286.7594 493.1801 1566.0241 756.533 1736.0332 941.9733 1462.7723"
           @click="navigateToExhibition"
           :class="[

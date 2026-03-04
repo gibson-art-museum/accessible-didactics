@@ -24,7 +24,7 @@
       aria-labelledby="current-exhibition-heading"
     >
       <h2 id="current-exhibition-heading" class="heading-section">
-        Current Exhibition
+        Current Exhibitions
       </h2>
       <div class="exhibition-card current-card">
         <div class="exhibition-card-body">
