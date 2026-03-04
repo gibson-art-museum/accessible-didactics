@@ -33,16 +33,19 @@
         <h2 id="introduction-heading" class="introduction-heading">
           Introduction
         </h2>
-        <p v-if="exhibition.introduction_text" class="introduction-text">
-          {{ exhibition.introduction_text }}
-        </p>
-        <ClientOnly>
-          <AudioPlayer
-            v-if="exhibition.introduction_audio"
-            :src="exhibition.introduction_audio"
-            title="Exhibition Introduction"
-          />
-        </ClientOnly>
+        <AudioPlayer
+          v-if="exhibition.introduction_audio"
+          :src="exhibition.introduction_audio"
+          title="Exhibition Introduction"
+        />
+        <div v-if="exhibition.introduction_text" class="introduction-text">
+          <p
+            v-for="(para, i) in exhibition.introduction_text.split('\n\n')"
+            :key="i"
+          >
+            {{ para }}
+          </p>
+        </div>
       </section>
 
       <!-- Individual rooms with anchor links -->
@@ -425,7 +428,14 @@ function formatDate(dateString: string): string {
 .introduction-text {
   line-height: 1.7;
   color: var(--color-text, #1a1a1a);
-  margin-bottom: 0;
+
+  p {
+    margin-bottom: 1rem;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
 }
 
 /* Room sections */
@@ -553,7 +563,6 @@ function formatDate(dateString: string): string {
     color: var(--color-text-light, #4a4a4a);
     margin-bottom: 0.25rem;
   }
-
 }
 
 .work-body {

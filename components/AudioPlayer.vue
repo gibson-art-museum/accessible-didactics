@@ -100,6 +100,13 @@ function onLoadedMetadata() {
   duration.value = audioEl.value?.duration ?? 0
 }
 
+onMounted(() => {
+  // loadedmetadata may have already fired before the listener was attached
+  if (audioEl.value && audioEl.value.readyState >= 1) {
+    duration.value = audioEl.value.duration
+  }
+})
+
 function onTimeUpdate() {
   if (!isScrubbing.value) {
     currentTime.value = audioEl.value?.currentTime ?? 0
