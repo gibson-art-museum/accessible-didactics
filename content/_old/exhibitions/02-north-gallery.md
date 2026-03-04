@@ -2,6 +2,7 @@
 title: 'North Gallery'
 description: 'This page is dedicated to describing artworks that are installed in the North Gallery.'
 location: 'North Gallery'
+room_id: 'north-gallery'
 created_at: '2026-02-17'
 updated_at: '2026-02-17'
 works:

@@ -1,7 +1,7 @@
 <template>
   <section class="exhibition-map" aria-labelledby="space-map-heading">
     <h2 id="space-map-heading" class="heading-section">
-      Map of Exhibition Space
+      {{ heading }}
     </h2>
     <div class="map-container">
       <svg
@@ -14,7 +14,7 @@
           points="2288.8651 1072.7349 2813.9561 1072.7349 2813.9561 23.7296 2288.8651 1072.7349"
           @click="navigateToExhibition"
           class="interactive-shape"
-          id="forum"
+          data-room="forum"
         />
         <rect
           x="2456.6795"
@@ -23,7 +23,7 @@
           height="242.6111"
           @click="navigateToExhibition"
           class="interactive-shape"
-          id="shop"
+          data-room="shop"
         />
         <rect
           x="1272.1927"
@@ -32,37 +32,37 @@
           height="702.4807"
           @click="navigateToExhibition"
           class="interactive-shape"
-          id="north-gallery"
+          data-room="north-gallery"
         />
         <polygon
           points="941.9733 1462.7723 681.6869 1286.7594 493.1801 1566.0241 756.533 1736.0332 941.9733 1462.7723"
           @click="navigateToExhibition"
           class="interactive-shape"
-          id="media-gallery"
+          data-room="media-gallery"
         />
         <polygon
           points="1043.1335 1454.542 1315.4357 1970.572 1619.4877 1809.3018 1345.1323 1287.545 1043.1335 1454.542"
           @click="navigateToExhibition"
           class="interactive-shape"
-          id="south-gallery"
+          data-room="south-gallery"
         />
         <polygon
           points="1516.4631 1585.66 1630.8827 1803.2577 2111.775 1548.1909 2000.1325 1334.7128 1516.4631 1585.66"
           @click="navigateToExhibition"
           class="interactive-shape"
-          id="library"
+          data-room="library"
         />
         <polygon
           points="1356.5491 1281.5425 1510.7268 1574.7507 2006.1429 1318.3745 1356.5491 1281.5425"
           @click="navigateToExhibition"
           class="interactive-shape"
-          id="salon"
+          data-room="salon"
         />
         <polygon
           points="684.3995 1282.7408 952.8369 1454.542 1043.1335 1454.542 1272.1927 1077.3158 970.4444 872.9802 423.2525 872.9802 423.2525 1282.7408 684.3995 1282.7408"
           @click="navigateToExhibition"
           class="interactive-shape"
-          id="andrew-petter-hall"
+          data-room="andrew-petter-hall"
         />
       </svg>
       <img
@@ -75,25 +75,38 @@
 </template>
 
 <script setup lang="ts">
-import { navigateTo } from '#app'
+import { nextTick } from 'vue'
+import { useRouter } from 'vue-router'
 
-const exhibitionMap: Record<string, string> = {
-  forum: '01-forum',
-  'north-gallery': '02-north-gallery',
-  'andrew-petter-hall': '03-andrew-petter-hall',
-  'media-gallery': '04-media-gallery',
-  salon: '05-salon',
-  'south-gallery': '06-south-gallery',
-  library: '07-library',
-  shop: '08-gift-shop-artworks',
+const router = useRouter()
+
+const props = withDefaults(
+  defineProps<{ basePath?: string; heading?: string }>(),
+  {
+    basePath: '/exhibitions/current',
+    heading: 'Map of Exhibition Space',
+  },
+)
+
+const scrollToId = (id: string) => {
+  const el = document.getElementById(id)
+  if (!el) return
+  el.scrollIntoView()
+  const heading = el.querySelector('h2, h3')
+  if (heading) {
+    heading.setAttribute('tabindex', '-1')
+    ;(heading as HTMLElement).focus()
+  }
 }
 
 const navigateToExhibition = async (event: Event) => {
   const target = event.target as SVGElement
-  const id = target.getAttribute('id')
-  if (id && exhibitionMap[id]) {
-    await navigateTo(`/exhibition/${exhibitionMap[id]}`)
-  }
+  const id = target.getAttribute('data-room')
+  if (!id) return
+
+  await router.push(`${props.basePath}#${id}`)
+  await nextTick()
+  scrollToId(id)
 }
 </script>
 

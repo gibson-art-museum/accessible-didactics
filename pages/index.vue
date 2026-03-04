@@ -1,13 +1,5 @@
 <template>
   <div class="home-page">
-    <section class="intro">
-      <h1>Welcome to Gibson Accessible Exhibition Didactics</h1>
-      <p class="lead">
-        Scan an Exhibition Didactic to access detailed information about
-        exhibits and artworks.
-      </p>
-    </section>
-
     <section class="help-section" aria-labelledby="help-heading">
       <h2 id="help-heading">How to Use</h2>
       <ol class="help-list">
@@ -26,45 +18,113 @@
       </ol>
     </section>
 
-    <MapSection />
-
+    <!-- Current Exhibition -->
     <section
-      v-if="exhibitions && exhibitions.length > 0"
-      class="available-exhibitions"
-      aria-labelledby="exhibitions-heading"
+      class="current-exhibition"
+      aria-labelledby="current-exhibition-heading"
     >
-      <h2 id="exhibitions-heading" class="heading-section">Exhibitions</h2>
-      <p class="sr-only">
-        This list shows all available exhibitions. Select an exhibition to view
-        its content.
-      </p>
-
-      <ul class="exhibition-list">
-        <li
-          v-for="exhibition in exhibitions"
-          :key="exhibition._path"
-          class="exhibition-item"
-        >
-          <NuxtLink
-            :to="`/exhibition/${exhibition._path.split('/').pop()}`"
-            class="exhibition-link"
+      <h2 id="current-exhibition-heading" class="heading-section">
+        Current Exhibition
+      </h2>
+      <div class="exhibition-card current-card">
+        <div class="exhibition-card-body">
+          <h3
+            class="exhibition-card-title"
+            v-html="
+              currentExhibition?.display_title || currentExhibition?.title
+            "
+          />
+          <p
+            v-if="currentExhibition?.description"
+            class="exhibition-card-description"
           >
-            <h3>{{ exhibition.title }}</h3>
-            <p v-if="exhibition.description" class="exhibition-description">
-              {{ exhibition.description }}
-            </p>
-            <p v-if="exhibition.location" class="exhibition-location-preview">
-              {{ exhibition.location }}
-            </p>
-            <span
-              v-if="exhibition.works"
-              class="works-count"
-              aria-label="Number of works"
+            {{ currentExhibition.description }}
+          </p>
+          <p
+            v-if="currentExhibition?.date_start || currentExhibition?.date_end"
+            class="exhibition-card-dates"
+          >
+            <time
+              v-if="currentExhibition.date_start"
+              :datetime="currentExhibition.date_start"
             >
-              {{ exhibition.works.length }}
-              {{ exhibition.works.length === 1 ? 'work' : 'works' }}
+              {{ formatDate(currentExhibition.date_start) }}
+            </time>
+            <span
+              v-if="currentExhibition.date_start && currentExhibition.date_end"
+            >
+              –
             </span>
+            <time
+              v-if="currentExhibition.date_end"
+              :datetime="currentExhibition.date_end"
+            >
+              {{ formatDate(currentExhibition.date_end) }}
+            </time>
+          </p>
+        </div>
+        <div class="exhibition-card-footer">
+          <NuxtLink to="/exhibitions/current" class="exhibition-card-btn">
+            View Exhibition
           </NuxtLink>
+        </div>
+      </div>
+    </section>
+
+    <!-- Past Exhibitions -->
+    <section
+      v-if="archivedExhibitions && archivedExhibitions.length > 0"
+      class="past-exhibitions"
+      aria-labelledby="past-exhibitions-heading"
+    >
+      <h2 id="past-exhibitions-heading" class="heading-section">
+        Past Exhibitions
+      </h2>
+      <ul class="archive-list">
+        <li
+          v-for="exhibition in archivedExhibitions"
+          :key="exhibition._path"
+          class="archive-item"
+        >
+          <div class="exhibition-card">
+            <div class="exhibition-card-body">
+              <h3 class="exhibition-card-title">{{ exhibition.title }}</h3>
+              <p
+                v-if="exhibition.description"
+                class="exhibition-card-description"
+              >
+                {{ exhibition.description }}
+              </p>
+              <p
+                v-if="exhibition.date_start || exhibition.date_end"
+                class="exhibition-card-dates"
+              >
+                <time
+                  v-if="exhibition.date_start"
+                  :datetime="exhibition.date_start"
+                >
+                  {{ formatDate(exhibition.date_start) }}
+                </time>
+                <span v-if="exhibition.date_start && exhibition.date_end">
+                  –
+                </span>
+                <time
+                  v-if="exhibition.date_end"
+                  :datetime="exhibition.date_end"
+                >
+                  {{ formatDate(exhibition.date_end) }}
+                </time>
+              </p>
+            </div>
+            <div class="exhibition-card-footer">
+              <NuxtLink
+                :to="`/exhibitions/${exhibition._path.split('/').pop()}`"
+                class="exhibition-card-btn"
+              >
+                View Exhibition
+              </NuxtLink>
+            </div>
+          </div>
         </li>
       </ul>
     </section>
@@ -72,10 +132,26 @@
 </template>
 
 <script setup lang="ts">
-// Fetch all available exhibitions
-const { data: exhibitions } = await useAsyncData('all-exhibitions', () =>
-  queryContent('/exhibitions').find(),
+// Fetch current exhibition
+const { data: currentExhibition } = await useAsyncData(
+  'current-exhibition-rooms-index',
+  () => queryContent('/exhibitions/current').findOne(),
 )
+
+// Fetch archived exhibitions
+const { data: archivedExhibitions } = await useAsyncData(
+  'archived-exhibitions-index',
+  () => queryContent('/archive').sort({ date_end: -1 }).find(),
+)
+
+function formatDate(dateString: string): string {
+  const date = new Date(dateString)
+  return date.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  })
+}
 
 // Set page metadata
 useHead({
@@ -96,103 +172,90 @@ useHead({
   margin: 0 auto;
 }
 
-.intro {
-  text-align: center;
+/* Current exhibition section */
+.current-exhibition {
   margin-bottom: 3rem;
-
-  h1 {
-    font-size: 2rem;
-    margin-bottom: 1rem;
-  }
-
-  .lead {
-    font-size: 1.25rem;
-    color: var(--color-text-light, #4a4a4a);
-    max-width: 600px;
-    margin: 0 auto;
-  }
 }
 
-.available-exhibitions {
-  margin-bottom: 3rem;
-
-  h2 {
-    margin-bottom: 1.5rem;
-    font-size: 1.75rem;
-  }
-}
-
-.exhibition-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 1.5rem;
-}
-
-.exhibition-item {
-  margin: 0;
-}
-
-.exhibition-link {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  padding: 1.5rem;
+/* Shared exhibition card */
+.exhibition-card {
   background: white;
   border: 2px solid var(--color-border, #cccccc);
   border-left: 4px solid var(--color-primary, #00606b);
   border-radius: 8px;
+  overflow: hidden;
+}
+
+.current-card {
+  border-left-width: 4px;
+}
+
+.exhibition-card-body {
+  padding: 1.75rem 1.75rem 1.25rem;
+}
+
+.exhibition-card-title {
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: var(--color-text, #1a1a1a);
+}
+
+.exhibition-card-description {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--color-text, #1a1a1a);
+  margin-bottom: 0.75rem;
+}
+
+.exhibition-card-dates {
+  font-size: 0.95rem;
+  color: var(--color-text-light, #4a4a4a);
+  margin-bottom: 1.25rem;
+}
+
+.exhibition-card-footer {
+  padding: 1rem 1.75rem 1.5rem;
+  border-top: 1px solid var(--color-border, #cccccc);
+  background: var(--color-bg-alt, #f5f5f5);
+}
+
+.exhibition-card-btn {
+  display: inline-block;
+  padding: 0.75rem 1.75rem;
+  background-color: var(--color-primary, #00606b);
+  color: white;
   text-decoration: none;
-  color: inherit;
-  transition: all 0.2s ease-in-out;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: background-color 0.2s ease-in-out;
 
   &:hover {
-    border-color: var(--color-primary, #00606b);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transform: translateY(-2px);
+    background-color: var(--color-primary-dark, #004d54);
   }
 
   &:focus {
     outline: 3px solid var(--color-focus, #00606b);
     outline-offset: 2px;
   }
+}
 
-  h3 {
-    font-size: 1.35rem;
-    margin-bottom: 0.75rem;
-    color: var(--color-primary, #00606b);
-  }
+/* Past exhibitions section */
+.past-exhibitions {
+  margin-bottom: 3rem;
+}
 
-  .exhibition-description {
-    margin-bottom: 0.75rem;
-    color: var(--color-text, #1a1a1a);
-    font-size: 0.95rem;
-    line-height: 1.5;
-    flex-grow: 1;
-  }
-
-  .exhibition-location-preview {
-    margin-bottom: 0.75rem;
-    color: var(--color-text-light, #4a4a4a);
-    font-size: 0.9rem;
-  }
-
-  .works-count {
-    display: inline-block;
-    padding: 0.25rem 0.75rem;
-    background-color: var(--color-secondary, #b40202);
-    color: white;
-    border-radius: 4px;
-    font-size: 0.875rem;
-    font-weight: 600;
-    align-self: flex-start;
-  }
+.archive-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
 }
 
 .help-section {
-  margin-top: 4rem;
   margin-bottom: 3rem;
   padding: 2rem;
   background-color: var(--color-bg-alt, #f5f5f5);
@@ -218,14 +281,6 @@ useHead({
 }
 
 @media (max-width: 640px) {
-  .intro h1 {
-    font-size: 1.5rem;
-  }
-
-  .intro .lead {
-    font-size: 1rem;
-  }
-
   .tag-list {
     grid-template-columns: 1fr;
   }

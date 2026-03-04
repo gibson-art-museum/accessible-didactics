@@ -1,0 +1,5 @@
+currently the "exhibitions" in this project are organized by "exhibition" however i have found that i actually want to always foreground the current exhibition and then have an archive of exhibitions. i want to keep the nfc tags that link to the urls consistent and based upon rooms, because each didactic will link to a room. currently in the content folder of exhibitions, i have all the rooms set up in correct order 1-8, which i want to translate to anchored headings in "current", so that i can link as follows: /exhibitions/current#forum, /exhibitions/current#north-gallery, etc
+
+i would prefer to not have numbers in the urls but as far as i know i need to use the numbers to order the content correctly currently. please fix this if you can. and give an example archived exhibition. counting the number of works in each room is not so important. i would prefer the archive of exhibitions be displayed underneath the current exhibiton, as the current exhibition always has priority.
+
+i want the svg links in the mapsection component to correspond to the rooms in the current exhibition only.
