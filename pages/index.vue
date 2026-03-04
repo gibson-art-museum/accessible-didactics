@@ -279,20 +279,4 @@ useHead({
     }
   }
 }
-
-@media (max-width: 640px) {
-  .tag-list {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .tag-link {
-    transition: none;
-
-    &:hover {
-      transform: none;
-    }
-  }
-}
 </style>

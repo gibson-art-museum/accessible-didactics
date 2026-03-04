@@ -1,340 +1,212 @@
-# Gibson Accessible Exhibition Didactics Website
+# Gibson Accessible Exhibition Didactics
 
-A fully accessible, mobile-first website for providing detailed content to blind and visually impaired users who tap NFC tags on physical exhibits, didactics, or informational materials.
+A fully accessible, mobile-first website for the **Gibson Art Museum at Simon Fraser University**. Visitors scan NFC tags on physical exhibition didactics to access detailed information about artworks — designed primarily for blind and visually impaired users.
+
+Deployed to GitHub Pages at `/accessible-didactics/`.
+
+---
 
 ## Features
 
-### Core Functionality
+- **Exhibition-based content model** — a single current exhibition page with all rooms and works, plus an archive of past exhibitions
+- **Interactive SVG map** — clickable museum floor plan that jumps to individual room sections; inactive rooms (not part of the current exhibition) are automatically disabled
+- **NFC-ready URLs** — tags link to `/exhibitions/current#room-id` for direct anchor navigation
+- **Text-to-Speech** — reads artwork descriptions aloud via the Web Speech API
+- **Accessibility controls** — high contrast mode toggle, adjustable text size
+- **WCAG 2.1 Level AA** — semantic HTML, ARIA labels, keyboard navigation, skip link, visible focus indicators
+- **PWA support** — installable and works offline
+- **Static site generation** — deployed as flat HTML via `npm run generate`
 
-- **Dynamic routing** for NFC tags at `/tag/[id]` URLs
-- **Content management** using Nuxt Content with Markdown files
-- **Progressive Web App (PWA)** support for offline access
-- **Text-to-Speech** integration using Web Speech API
-
-### Accessibility First
-
-- **WCAG 2.1 Level AA compliant** design
-- **Screen reader optimized** with semantic HTML and ARIA labels
-- **Keyboard navigation** support with visible focus indicators
-- **High contrast mode** toggle
-- **Adjustable text size** controls
-- **Skip to content** link for keyboard users
-- **No keyboard traps** or auto-playing content
-
-### User Experience
-
-- Mobile-first responsive design
-- Touch targets minimum 44x44px
-- Fast load times optimized for 3G networks
-- Clean, distraction-free layout
-- Graceful error handling with helpful 404 page
+---
 
 ## Tech Stack
 
-- **Framework:** [Nuxt 3](https://nuxt.com/) (Vue.js)
-- **Content:** [Nuxt Content](https://content.nuxt.com/) (Markdown-based)
-- **Styling:** Custom SCSS with accessibility-first design tokens
-- **PWA:** [@vite-pwa/nuxt](https://vite-pwa-org.netlify.app/)
-- **TypeScript:** For type safety
+| Tool                                                | Purpose                               |
+| --------------------------------------------------- | ------------------------------------- |
+| [Nuxt 3](https://nuxt.com/)                         | Framework (Vue 3, SSG)                |
+| [@nuxt/content v2](https://content.nuxt.com/)       | Markdown content via `queryContent()` |
+| [@vite-pwa/nuxt](https://vite-pwa-org.netlify.app/) | PWA / offline support                 |
+| [TailwindCSS](https://tailwindcss.com/)             | Utility classes (minimal use)         |
+| TypeScript                                          | Type safety throughout                |
+
+---
 
 ## Project Structure
 
 ```
 accessible-didactics/
-├── assets/
-│   └── css/
-│       ├── _variables.scss       # Design tokens
-│       └── main.scss              # Global styles
+├── app/
+│   └── router.options.ts          # Custom scroll behaviour for hash navigation
+├── assets/css/
+│   └── main.css                   # Global styles and design tokens
 ├── components/
-│   ├── AccessibilityControls.vue # Contrast/text size controls
+│   ├── AccessibilityControls.vue  # Contrast / text size toggles
+│   ├── MapSection.vue             # Interactive SVG museum map
 │   ├── SkipLink.vue               # Skip to main content
-│   └── TextToSpeech.vue           # Read aloud functionality
+│   └── TextToSpeech.vue           # Read aloud button
 ├── content/
-│   └── tags/                      # Tag content (Markdown files)
-│       ├── 001.md
-│       ├── 002.md
-│       └── gallery-a-sculpture-1.md
+│   ├── exhibitions/
+│   │   └── current.md             # Current exhibition (all rooms + works)
+│   └── archive/
+│       └── 2025-fall.md           # Past exhibitions (same structure)
 ├── layouts/
-│   └── default.vue                # Main layout with header/footer
+│   └── default.vue                # Site-wide header / footer / accessibility bar
 ├── pages/
-│   ├── index.vue                  # Home page
-│   ├── error.vue                  # 404/error page
-│   └── tag/
-│       └── [id].vue               # Dynamic tag page
-├── public/                        # Static assets
-├── nuxt.config.ts                 # Nuxt configuration
-├── CONTENT_MANAGEMENT.md          # Content editing guide
-└── REQUIREMENTS.md                # Full project requirements
+│   ├── index.vue                  # Homepage (current + past exhibition cards)
+│   ├── error.vue                  # 404 page
+│   └── exhibitions/
+│       ├── current.vue            # Current exhibition page with map
+│       └── [slug].vue             # Archive exhibition page (e.g. /exhibitions/2025-fall)
+├── public/
+│   └── museum_map_only.png        # Base map image used by MapSection
+├── nuxt.config.ts
+└── REQUIREMENTS.md
 ```
 
-## Getting Started
+---
 
-### Prerequisites
+## Content Model
 
-- Node.js 20.17.0 or higher
-- npm 10.x or higher
+### Current Exhibition — `content/exhibitions/current.md`
 
-### Installation
+A single YAML frontmatter file. All rooms and works live here.
+
+```yaml
+---
+title: 'Plain text title for SEO/meta'
+display_title: 'HTML title with <em>italic exhibition names</em>'
+description: 'Short description shown on homepage card'
+date_start: '2026-03-07'
+date_end: '2026-06-14'
+rooms:
+  - title: 'North Gallery'
+    room_id: 'north-gallery' # Must match data-room on SVG + page anchor
+    works:
+      - anchor: 'work-slug' # Used for in-page anchor ID
+        title: 'Work Title'
+        year: '2024'
+        artist: 'Artist Name'
+        materials: 'Oil on canvas'
+        collection: 'Collection name'
+        location: 'North Gallery'
+        description: 'Artwork description for screen readers and TTS.'
+---
+```
+
+**To exclude a room from the current exhibition**, simply omit it from the `rooms:` array. The map region will be automatically disabled (non-clickable) and the room section will not render on the page.
+
+### Available Room IDs
+
+These `room_id` values correspond to regions on the SVG map. Use them exactly:
+
+| Room                        | `room_id`            |
+| --------------------------- | -------------------- |
+| Arya and Hamid Eshghi Forum | `forum`              |
+| North Gallery               | `north-gallery`      |
+| Andrew Petter Hall          | `andrew-petter-hall` |
+| Media Gallery               | `media-gallery`      |
+| Salon                       | `salon`              |
+| South Gallery               | `south-gallery`      |
+| Library                     | `library`            |
+| Shop                        | `shop`               |
+
+### Archiving an Exhibition
+
+1. Copy `content/exhibitions/current.md` to `content/archive/YYYY-season.md` (e.g. `2026-spring.md`)
+2. Update `current.md` with the new exhibition's content
+3. Add the archive slug to the prerender routes in `nuxt.config.ts`:
+   ```ts
+   nitro: {
+     prerender: {
+       routes: ['/', '/exhibitions/current', '/exhibitions/2026-spring']
+     }
+   }
+   ```
+
+The new archive will appear automatically in the "Past Exhibitions" section on the homepage and on the current exhibition page.
+
+---
+
+## NFC Tag Setup
+
+NFC tags should be programmed with URLs in the format:
+
+```
+https://sfu-library.github.io/accessible-didactics/exhibitions/current#room-id
+```
+
+For example, a tag placed in the Salon would point to:
+
+```
+https://sfu-library.github.io/accessible-didactics/exhibitions/current#salon
+```
+
+**Hardware:** NTAG215 stickers + any NFC writing app (e.g. NFC Tools)  
+**iPhone:** iOS 13+ reads NFC automatically  
+**Android:** Android 5.0+ with NFC enabled  
+**Requirement:** URLs must be HTTPS for iPhone compatibility
+
+---
+
+## Development
 
 ```bash
 # Install dependencies
 npm install
-```
 
-### Development
-
-```bash
-# Start development server (with hot reload)
+# Start dev server (http://localhost:3000)
 npm run dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) in your browser.
-
-### Adding Content
-
-1. Create a new Markdown file in `content/tags/`:
-
-```bash
-# Example: Create tag for ID "003"
-touch content/tags/003.md
-```
-
-2. Add frontmatter and content:
-
-```markdown
----
-tag_id: '003'
-title: 'Your Title Here'
-location: 'Gallery A, West Wall'
-created_at: '2025-10-18'
-updated_at: '2025-10-18'
-related_tags: ['001', '002']
----
-
-Your content goes here in Markdown format.
-
-## Subheadings
-
-Use H2 for main sections.
-```
-
-3. The tag will be immediately available at `/tag/003`
-
-See [CONTENT_MANAGEMENT.md](./CONTENT_MANAGEMENT.md) for detailed instructions, including CSV bulk import.
-
-## Building for Production
-
-```bash
 # Generate static site
 npm run generate
 
-# Preview the generated site
+# Preview the generated output
 npm run preview
 ```
 
-The static files will be in `.output/public/` ready for deployment.
+The generated static files are in `.output/public/`.
 
-## Deployment
+---
 
-### GitHub Pages
+## Deployment (GitHub Pages)
 
-1. Update `nuxt.config.ts` with your site URL:
+The site is configured for GitHub Pages at base path `/accessible-didactics/`. This is set in `nuxt.config.ts`:
 
-```typescript
-runtimeConfig: {
-  public: {
-    siteUrl: 'https://yourusername.github.io/accessible-didactics'
-  }
+```ts
+app: {
+  baseURL: '/accessible-didactics/',
+  cdnURL: '/accessible-didactics/',
 }
 ```
 
-2. Generate and deploy:
+To deploy, generate the site and push `.output/public/` to the `gh-pages` branch, or use a GitHub Actions workflow.
 
-```bash
-npm run generate
-# Push the .output/public/ directory to your gh-pages branch
-```
-
-### Netlify
-
-1. Connect your Git repository
-2. Build command: `npm run generate`
-3. Publish directory: `.output/public`
-4. Deploy!
-
-### Vercel
-
-```bash
-npm install -g vercel
-vercel
-```
-
-Follow the prompts to deploy.
-
-## NFC Tag Setup
-
-### Hardware Needed
-
-- **NFC Reader/Writer:** ACR122U USB NFC Reader
-- **NFC Tags:** NTAG215 stickers (compatible with iPhone and Android)
-- **Software:** Any NFC writing app (e.g., NFC Tools)
-
-### Programming Tags
-
-1. Write the URL to each tag in NDEF format:
-
-   ```
-   https://yourdomain.com/tag/001
-   ```
-
-2. Test with your phone:
-   - **iPhone:** iOS 13+ automatically reads NFC tags
-   - **Android:** Most devices with Android 5.0+ support NFC
-
-3. **Important:** URLs must use HTTPS for iPhone compatibility
-
-### Tag ID Best Practices
-
-- Use **alphanumeric characters** only (letters, numbers, hyphens)
-- Keep IDs **short and memorable** (e.g., "001", "gallery-a-1")
-- Use a **consistent naming scheme**
-- Document your ID system in a spreadsheet
+---
 
 ## Accessibility Testing
 
-### Automated Testing
+- **macOS VoiceOver:** ⌘ + F5
+- **iOS VoiceOver:** Settings → Accessibility
+- **NVDA (Windows):** [nvaccess.org](https://www.nvaccess.org/)
+- **Keyboard nav:** Tab / Shift+Tab through all interactive elements
+- **Automated:** [WAVE extension](https://wave.webaim.org/extension/) or [axe DevTools](https://www.deque.com/axe/devtools/)
 
-```bash
-# Run Lighthouse audit
-npm run build
-npx lighthouse http://localhost:3000 --view
-```
+Target: **Lighthouse Accessibility 95+**
 
-Target scores:
-
-- Accessibility: 95+
-- Performance: 85+
-- Best Practices: 95+
-
-### Manual Testing
-
-#### Screen Readers
-
-- **macOS:** VoiceOver (⌘ + F5)
-- **Windows:** [NVDA](https://www.nvaccess.org/) (free)
-- **iOS:** VoiceOver (Settings > Accessibility)
-- **Android:** TalkBack (Settings > Accessibility)
-
-#### Keyboard Navigation
-
-1. Press `Tab` to move through interactive elements
-2. Press `Enter` or `Space` to activate buttons/links
-3. Press `Shift + Tab` to move backwards
-4. Ensure all functionality is accessible
-
-#### Color Contrast
-
-Use browser extensions:
-
-- [WAVE](https://wave.webaim.org/extension/)
-- [axe DevTools](https://www.deque.com/axe/devtools/)
-
-## Configuration
-
-### Environment Variables
-
-Create a `.env` file:
-
-```bash
-NUXT_PUBLIC_SITE_URL=https://yourdomain.com
-```
-
-### PWA Settings
-
-Edit `nuxt.config.ts` to customize PWA manifest:
-
-```typescript
-pwa: {
-  manifest: {
-    name: 'Your Site Name',
-    short_name: 'Short Name',
-    description: 'Your description',
-    theme_color: '#0066cc'
-  }
-}
-```
-
-### Styling
-
-Edit design tokens in `assets/css/_variables.scss`:
-
-```scss
-$color-primary: #0066cc; // Primary color
-$font-size-base: 18px; // Base font size
-$color-text: #1a1a1a; // Text color
-```
-
-## Browser Support
-
-- iOS Safari 13+
-- Android Chrome 5.0+
-- Desktop browsers (Chrome, Firefox, Safari, Edge)
-- Works without JavaScript (progressive enhancement)
-
-## Performance Optimization
-
-- Static site generation for instant loading
-- Lazy-loaded components
-- Optimized images (use `.webp` format)
-- Minimal JavaScript bundle
-- Service worker for offline caching
+---
 
 ## Troubleshooting
 
-### Dev server won't start
+**Dev server won't start:**
 
 ```bash
-# Clear Nuxt cache and reinstall
 rm -rf .nuxt node_modules package-lock.json
 npm install
 npm run dev
 ```
 
-### Tags not loading
+**Map region not clicking:**  
+Check that the `room_id` in your content file exactly matches the `data-room` attribute on the SVG shape in `MapSection.vue`.
 
-1. Check file exists in `content/tags/`
-2. Verify filename matches tag ID
-3. Check frontmatter YAML is valid
-4. Restart dev server
-
-### Accessibility issues
-
-1. Run Lighthouse audit for specific problems
-2. Test with actual screen readers
-3. Verify keyboard navigation works
-4. Check color contrast ratios
-
-## Contributing
-
-When contributing, please:
-
-1. Follow existing code style
-2. Test with screen readers
-3. Maintain WCAG 2.1 Level AA compliance
-4. Update documentation as needed
-5. Write accessible, semantic HTML
-
-## Support
-
-For questions or issues:
-
-- Review [REQUIREMENTS.md](./REQUIREMENTS.md) for project details
-- Check [CONTENT_MANAGEMENT.md](./CONTENT_MANAGEMENT.md) for content help
-
-## Acknowledgments
-
-Built with accessibility as the top priority to make physical spaces more inclusive for blind and visually impaired visitors.
-
----
-
-**Project Goals:** 95+ Lighthouse Accessibility Score | WCAG 2.1 Level AA | Fast Load Times | Offline Support
+**Anchor not scrolling to room:**  
+Ensure the room's `room_id` is present in the `rooms:` array — omitted rooms have their anchors removed from the DOM.

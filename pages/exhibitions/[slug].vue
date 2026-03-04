@@ -21,7 +21,10 @@
       </header>
 
       <!-- Map linking to anchors on this page -->
-      <MapSection :basePath="`/exhibitions/${slug}`" />
+      <MapSection
+        :basePath="`/exhibitions/${slug}`"
+        :active-rooms="rooms.map((r) => r.room_id)"
+      />
 
       <!-- Room navigation -->
       <nav

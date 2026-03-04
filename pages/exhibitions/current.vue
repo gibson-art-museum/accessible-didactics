@@ -6,7 +6,10 @@
       role="article"
     >
       <!-- Map linking to anchors on this page -->
-      <MapSection heading="Current Exhibition Map" />
+      <MapSection
+        heading="Current Exhibition Map"
+        :active-rooms="rooms.map((r) => r.room_id)"
+      />
 
       <!-- Room navigation -->
       <nav class="rooms-navigation" aria-label="Navigate between rooms">
